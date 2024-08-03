@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Node : MonoBehaviour
 {
@@ -12,10 +13,10 @@ public class Node : MonoBehaviour
     public int totalFaces;
     public List<int> interconnectedFaces;
 
-    [SerializeField] private NodeUI nodeUI;
-    [SerializeField] private bool canRotate;
-    [SerializeField] private int totalFaces;
-    [SerializeField] private List<int> interconnectedFaces;
+    public UnityEvent OnNodeRotated;
+    public UnityEvent<bool> OnEnergyChanged;
+
+
     public bool HasEnergy { get => isSource || hasEnergy; set => hasEnergy = value; }
     private bool hasEnergy;
     
@@ -30,6 +31,8 @@ public class Node : MonoBehaviour
 
     public void Rotate()
     {
+        OnNodeRotated.Invoke();
+
         if (!canRotate)
         {
             return;
@@ -53,6 +56,8 @@ public class Node : MonoBehaviour
                 connectedFaces[rotatedFace].node.SetEnergyOnNode(HasEnergy);
             }
         }
+
+        OnEnergyChanged.Invoke(HasEnergy);
     }
 
     private bool IsReceivingEnergy(out int localSourceFace)
