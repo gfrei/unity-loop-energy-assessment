@@ -4,26 +4,54 @@ using UnityEngine;
 
 public class NodeBase : MonoBehaviour
 {
-    [SerializeField] protected int sides;
-    [SerializeField] protected List<int> conectedSides;
-    [SerializeField] protected bool hasEnergy;
+    [SerializeField] protected int totalSides;
+    [SerializeField] protected List<int> interconnectedSides;
     [SerializeField] protected bool canRotate;
+    public bool HasEnergy { get; protected set; }
+    
+    protected int currentRotation;
+    protected Dictionary<int, NodeBase> nodeConnections;
 
-    private List<NodeBase> adjacentNodes;
-
-    protected int rotation;
 
     private void Awake()
     {
-        adjacentNodes = new List<NodeBase>();
+        nodeConnections = new Dictionary<int, NodeBase>();
     }
 
     public void Rotate()
     {
         if (canRotate)
         {
-            rotation++;
-            rotation %= sides;
+            currentRotation++;
+            currentRotation %= totalSides;
         }
+    }
+
+    public bool IsNodeSideEnergized(int side)
+    {
+        if (!HasEnergy)
+        {
+            return false;
+        }
+
+        if (!interconnectedSides.Contains(side + currentRotation)) 
+        { 
+            return false;
+        }
+
+        return true;
+    }
+
+    public void AddConnection(NodeConnection connection)
+    {
+        if (connection.sideA.node == this)
+        {
+            nodeConnections[connection.sideA.sidePosition] = connection.sideB.node;
+        }
+        else
+        {
+            nodeConnections[connection.sideB.sidePosition] = connection.sideA.node;
+        }
+
     }
 }
