@@ -4,13 +4,16 @@ using UnityEngine;
 
 public class Node : MonoBehaviour
 {
-    [SerializeField] protected int totalSides;
-    [SerializeField] protected List<int> interconnectedSides;
-    [SerializeField] protected bool canRotate;
-    public bool HasEnergy { get; protected set; }
+    [SerializeField] private bool isSource;
+    [SerializeField] private bool isSink;
+    [SerializeField] private int totalSides;
+    [SerializeField] private List<int> interconnectedSides;
+    [SerializeField] private bool canRotate;
+    public bool HasEnergy { get => isSource || hasEnergy; set => hasEnergy = value; }
+    private bool hasEnergy;
     
-    protected int currentRotation;
-    protected Dictionary<int, Node> nodeConnections;
+    private int currentRotation;
+    private Dictionary<int, Node> nodeConnections;
 
 
     private void Awake()
