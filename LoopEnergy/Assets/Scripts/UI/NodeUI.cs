@@ -21,17 +21,6 @@ public class NodeUI : MonoBehaviour
         {
             faceObjects[face].SetActive(true);
         }
-
-        //StartCoroutine(DebugRotateCoroutine());
-    }
-
-    private IEnumerator DebugRotateCoroutine()
-    {
-        while(true)
-        {
-            yield return new WaitForSeconds(1f);
-            OnRotateNode();
-        }
     }
 
     public void OnRotateNode()
