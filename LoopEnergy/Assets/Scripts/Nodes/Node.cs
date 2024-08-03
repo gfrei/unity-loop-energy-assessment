@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NodeBase : MonoBehaviour
+public class Node : MonoBehaviour
 {
     [SerializeField] protected int totalSides;
     [SerializeField] protected List<int> interconnectedSides;
@@ -10,12 +10,12 @@ public class NodeBase : MonoBehaviour
     public bool HasEnergy { get; protected set; }
     
     protected int currentRotation;
-    protected Dictionary<int, NodeBase> nodeConnections;
+    protected Dictionary<int, Node> nodeConnections;
 
 
     private void Awake()
     {
-        nodeConnections = new Dictionary<int, NodeBase>();
+        nodeConnections = new Dictionary<int, Node>();
     }
 
     public void Rotate()

@@ -5,7 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public struct NodeSide
 {
-    public NodeBase node;
+    public Node node;
     public int sidePosition;
 }
 

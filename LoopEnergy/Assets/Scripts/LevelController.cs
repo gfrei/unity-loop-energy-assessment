@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LevelController : MonoBehaviour
 {
-    [SerializeField] private List<NodeBase> nodes;
+    [SerializeField] private List<Node> nodes;
     [SerializeField] private List<NodeConnection> nodeConnections;
 
 
