@@ -5,8 +5,9 @@ using UnityEngine;
 
 public class Node : MonoBehaviour
 {
-    [SerializeField] private bool isSource;
-    [SerializeField] private bool isSink;
+    public bool isSource;
+    public bool isSink;
+
     [SerializeField] private bool canRotate;
     [SerializeField] private int totalFaces;
     [SerializeField] private List<int> interconnectedFaces;
@@ -31,10 +32,10 @@ public class Node : MonoBehaviour
         currentRotation++;
         currentRotation %= totalFaces;
 
-        UpdateNodeConnectedFaces();
+        UpdateNode();
     }
 
-    private void UpdateNodeConnectedFaces()
+    private void UpdateNode()
     {
         HasEnergy = IsReceivingEnergy(out int localSourceFace);
 
@@ -79,7 +80,7 @@ public class Node : MonoBehaviour
 
         HasEnergy = receivingEnergy;
 
-        UpdateNodeConnectedFaces();
+        UpdateNode();
     }
 
     public bool IsNodeFaceEnergized(int face)
