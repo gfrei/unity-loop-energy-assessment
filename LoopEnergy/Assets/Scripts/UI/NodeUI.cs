@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NodeUI : MonoBehaviour
 {
-    [SerializeField] private GameObject uiObject;
+    [SerializeField] private RectTransform uiObject;
     [SerializeField] private List<GameObject> faceObjects;
 
     private bool canRotate;
@@ -41,7 +41,7 @@ public class NodeUI : MonoBehaviour
 
         if (canRotate)
         {
-            uiObject.transform.Rotate(rotation);
+            uiObject.Rotate(rotation);
         }
         else
         {
