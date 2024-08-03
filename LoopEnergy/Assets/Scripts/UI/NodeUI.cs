@@ -5,22 +5,30 @@ using UnityEngine;
 public class NodeUI : MonoBehaviour
 {
     [SerializeField] private RectTransform uiObject;
+    [SerializeField] private RectTransform hasEnergyObject;
+    [SerializeField] private RectTransform noEnergyObject;
+    [SerializeField] private RectTransform isSourceObject;
+    [SerializeField] private RectTransform isSinkObject;
     [SerializeField] private List<GameObject> faceObjects;
 
     private bool canRotate;
     private int totalFaces;
     private List<int> interconnectedFaces;
 
-    public void Init(bool canRotate, int totalFaces, List<int> interconnectedFaces)
+    public void Init(Node node)
     {
-        this.canRotate = canRotate;
-        this.totalFaces = totalFaces;
-        this.interconnectedFaces = interconnectedFaces;
+        canRotate = node.canRotate;
+        totalFaces = node.totalFaces;
+        interconnectedFaces = node.interconnectedFaces;
+        isSinkObject.gameObject.SetActive(node.isSink);
+        isSourceObject.gameObject.SetActive(node.isSource);
 
         foreach (var face in interconnectedFaces)
         {
             faceObjects[face].SetActive(true);
         }
+
+        OnEnergyChanged(node.HasEnergy);
     }
 
     public void OnRotateNode()
@@ -36,6 +44,12 @@ public class NodeUI : MonoBehaviour
         {
             //Run cant rotate feedback
         }
+    }
+
+    public void OnEnergyChanged(bool hasEnergy)
+    {
+        hasEnergyObject.gameObject.SetActive(hasEnergy);
+        noEnergyObject.gameObject.SetActive(!hasEnergy);
     }
 
 }
