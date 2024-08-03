@@ -8,6 +8,7 @@ public class Node : MonoBehaviour
     public bool isSource;
     public bool isSink;
 
+    [SerializeField] private NodeUI nodeUI;
     [SerializeField] private bool canRotate;
     [SerializeField] private int totalFaces;
     [SerializeField] private List<int> interconnectedFaces;
@@ -20,6 +21,7 @@ public class Node : MonoBehaviour
     private void Awake()
     {
         connectedFaces = new Dictionary<int, NodeFace>();
+        nodeUI.Init(canRotate, totalFaces, interconnectedFaces);
     }
 
     public void Rotate()
