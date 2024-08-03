@@ -17,8 +17,8 @@ public class LevelController : MonoBehaviour
     {
         foreach (var connection in nodeConnections) 
         {
-            connection.sideA.node.AddConnection(connection);
-            connection.sideB.node.AddConnection(connection);
+            connection.nodeAFace.node.AddConnection(connection);
+            connection.nodeBFace.node.AddConnection(connection);
         }
     }
 }

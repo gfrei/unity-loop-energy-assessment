@@ -8,17 +8,17 @@ public class Node : MonoBehaviour
     [SerializeField] private bool isSource;
     [SerializeField] private bool isSink;
     [SerializeField] private bool canRotate;
-    [SerializeField] private int totalSides;
-    [SerializeField] private List<int> interconnectedSides;
+    [SerializeField] private int totalFaces;
+    [SerializeField] private List<int> interconnectedFaces;
     public bool HasEnergy { get => isSource || hasEnergy; set => hasEnergy = value; }
     private bool hasEnergy;
     
     private int currentRotation;
-    private Dictionary<int, NodeSide> connectedSides;
+    private Dictionary<int, NodeFace> connectedFaces;
 
     private void Awake()
     {
-        connectedSides = new Dictionary<int, NodeSide>();
+        connectedFaces = new Dictionary<int, NodeFace>();
     }
 
     public void Rotate()
@@ -29,43 +29,43 @@ public class Node : MonoBehaviour
         }
 
         currentRotation++;
-        currentRotation %= totalSides;
+        currentRotation %= totalFaces;
 
-        UpdateNodeConnectedSides();
+        UpdateNodeConnectedFaces();
     }
 
-    private void UpdateNodeConnectedSides()
+    private void UpdateNodeConnectedFaces()
     {
-        HasEnergy = IsReceivingEnergy(out int localSourceSide);
+        HasEnergy = IsReceivingEnergy(out int localSourceFace);
 
-        foreach (int side in interconnectedSides)
+        foreach (int face in interconnectedFaces)
         {
-            int rotatedSide = side + currentRotation;
-            if (connectedSides.ContainsKey(rotatedSide) && localSourceSide != rotatedSide)
+            int rotatedFace = face + currentRotation;
+            if (connectedFaces.ContainsKey(rotatedFace) && localSourceFace != rotatedFace)
             {
-                connectedSides[rotatedSide].node.SetEnergyOnNode(HasEnergy);
+                connectedFaces[rotatedFace].node.SetEnergyOnNode(HasEnergy);
             }
         }
     }
 
-    private bool IsReceivingEnergy(out int localSourceSide)
+    private bool IsReceivingEnergy(out int localSourceFace)
     {
-        foreach (int side in interconnectedSides)
+        foreach (int face in interconnectedFaces)
         {
-            int rotatedSide = side + currentRotation;
+            int rotatedFace = face + currentRotation;
 
-            if (connectedSides.ContainsKey(rotatedSide))
+            if (connectedFaces.ContainsKey(rotatedFace))
             {
-                var nodeSide = connectedSides[rotatedSide];
-                if (nodeSide.node.IsNodeSideEnergized(nodeSide.sidePosition))
+                var nodeFace = connectedFaces[rotatedFace];
+                if (nodeFace.node.IsNodeFaceEnergized(nodeFace.facePosition))
                 {
-                    localSourceSide = rotatedSide;
+                    localSourceFace = rotatedFace;
                     return true;
                 }
             }
         }
 
-        localSourceSide = -1;
+        localSourceFace = -1;
 
         return false;
     }
@@ -79,17 +79,17 @@ public class Node : MonoBehaviour
 
         HasEnergy = receivingEnergy;
 
-        UpdateNodeConnectedSides();
+        UpdateNodeConnectedFaces();
     }
 
-    public bool IsNodeSideEnergized(int side)
+    public bool IsNodeFaceEnergized(int face)
     {
         if (!HasEnergy)
         {
             return false;
         }
 
-        if (!interconnectedSides.Contains(side + currentRotation)) 
+        if (!interconnectedFaces.Contains(face + currentRotation)) 
         { 
             return false;
         }
@@ -99,13 +99,13 @@ public class Node : MonoBehaviour
 
     public void AddConnection(NodeConnection connection)
     {
-        if (connection.sideA.node == this)
+        if (connection.nodeAFace.node == this)
         {
-            connectedSides[connection.sideA.sidePosition] = connection.sideB;
+            connectedFaces[connection.nodeAFace.facePosition] = connection.nodeBFace;
         }
         else
         {
-            connectedSides[connection.sideB.sidePosition] = connection.sideA;
+            connectedFaces[connection.nodeBFace.facePosition] = connection.nodeAFace;
         }
 
     }

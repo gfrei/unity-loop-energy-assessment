@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public struct NodeSide
+public struct NodeFace
 {
     public Node node;
-    public int sidePosition;
+    public int facePosition;
 }
 
 public class NodeConnection : MonoBehaviour
 {
-    public NodeSide sideA;
-    public NodeSide sideB;
+    public NodeFace nodeAFace;
+    public NodeFace nodeBFace;
 }
