@@ -44,6 +44,46 @@ public class Node : MonoBehaviour
         UpdateNode();
     }
 
+    public void AddConnection(NodeConnection connection)
+    {
+        if (connection.nodeAFace.node == this)
+        {
+            connectedFaces[connection.nodeAFace.facePosition] = connection.nodeBFace;
+        }
+        else
+        {
+            connectedFaces[connection.nodeBFace.facePosition] = connection.nodeAFace;
+        }
+
+    }
+
+    public void SetEnergyOnNode(bool receivingEnergy, Node requester)
+    {
+        if (receivingEnergy == HasEnergy)
+        {
+            return;
+        }
+
+        HasEnergy = receivingEnergy;
+
+        UpdateNode(requester);
+    }
+
+    public bool IsNodeFaceEnergized(int face)
+    {
+        if (!HasEnergy)
+        {
+            return false;
+        }
+
+        if (!interconnectedFaces.Contains((face + currentRotation) % totalFaces))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     private void UpdateNode(Node requester = null)
     {
         HasEnergy = IsReceivingEnergy(out int localSourceFace);
@@ -80,45 +120,5 @@ public class Node : MonoBehaviour
         localSourceFace = -1;
 
         return false;
-    }
-
-    public void SetEnergyOnNode(bool receivingEnergy, Node requester)
-    {
-        if (receivingEnergy == HasEnergy)
-        {
-            return;
-        }
-
-        HasEnergy = receivingEnergy;
-
-        UpdateNode(requester);
-    }
-
-    public bool IsNodeFaceEnergized(int face)
-    {
-        if (!HasEnergy)
-        {
-            return false;
-        }
-
-        if (!interconnectedFaces.Contains((face + currentRotation) % totalFaces)) 
-        { 
-            return false;
-        }
-
-        return true;
-    }
-
-    public void AddConnection(NodeConnection connection)
-    {
-        if (connection.nodeAFace.node == this)
-        {
-            connectedFaces[connection.nodeAFace.facePosition] = connection.nodeBFace;
-        }
-        else
-        {
-            connectedFaces[connection.nodeBFace.facePosition] = connection.nodeAFace;
-        }
-
     }
 }
