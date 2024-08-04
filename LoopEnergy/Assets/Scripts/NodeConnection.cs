@@ -22,14 +22,6 @@ public class NodeConnection : MonoBehaviour
         return nodeAFacing && nodeBFacing;
     }
 
-    public bool ContainsFace(Node node, int facePosition)
-    {
-        bool nodeA = nodeAFace.node == node && nodeAFace.facePosition == facePosition;
-        bool nodeB = nodeBFace.node == node && nodeBFace.facePosition == facePosition;
-
-        return nodeA || nodeB;
-    }
-
     public Node GetConnectedNode(Node node)
     {
         if (nodeAFace.node == node)
