@@ -44,16 +44,16 @@ public class Node : MonoBehaviour
         UpdateNode();
     }
 
-    private void UpdateNode()
+    private void UpdateNode(Node requester = null)
     {
         HasEnergy = IsReceivingEnergy(out int localSourceFace);
 
         foreach (int face in interconnectedFaces)
         {
-            int rotatedFace = face + currentRotation;
-            if (connectedFaces.ContainsKey(rotatedFace) && localSourceFace != rotatedFace)
+            int rotatedFace = (face + currentRotation) % totalFaces;
+            if (connectedFaces.ContainsKey(rotatedFace) && localSourceFace != rotatedFace && requester != connectedFaces[rotatedFace].node)
             {
-                connectedFaces[rotatedFace].node.SetEnergyOnNode(HasEnergy);
+                connectedFaces[rotatedFace].node.SetEnergyOnNode(HasEnergy, this);
             }
         }
 
@@ -64,7 +64,7 @@ public class Node : MonoBehaviour
     {
         foreach (int face in interconnectedFaces)
         {
-            int rotatedFace = face + currentRotation;
+            int rotatedFace = (face + currentRotation) % totalFaces;
 
             if (connectedFaces.ContainsKey(rotatedFace))
             {
@@ -82,7 +82,7 @@ public class Node : MonoBehaviour
         return false;
     }
 
-    public void SetEnergyOnNode(bool receivingEnergy)
+    public void SetEnergyOnNode(bool receivingEnergy, Node requester)
     {
         if (receivingEnergy == HasEnergy)
         {
@@ -91,7 +91,7 @@ public class Node : MonoBehaviour
 
         HasEnergy = receivingEnergy;
 
-        UpdateNode();
+        UpdateNode(requester);
     }
 
     public bool IsNodeFaceEnergized(int face)
@@ -101,7 +101,7 @@ public class Node : MonoBehaviour
             return false;
         }
 
-        if (!interconnectedFaces.Contains(face + currentRotation)) 
+        if (!interconnectedFaces.Contains((face + currentRotation) % totalFaces)) 
         { 
             return false;
         }
