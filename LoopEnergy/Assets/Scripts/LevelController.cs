@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class LevelController : MonoBehaviour
 {
-    [SerializeField] private LevelConfig levelConfigPrefab;
+    [SerializeField] private GameConfig gameConfig;
 
     private List<Node> changedNodes = new List<Node>();
     private List<Node> litNodes = new List<Node>();
@@ -20,7 +20,7 @@ public class LevelController : MonoBehaviour
 
     private void SetLevel()
     {
-        levelInstance = Instantiate(levelConfigPrefab);
+        levelInstance = Instantiate(gameConfig.Levels[0]);
 
         foreach (var connection in levelInstance.nodeConnections) 
         {
