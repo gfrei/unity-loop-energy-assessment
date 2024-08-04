@@ -6,13 +6,15 @@ using UnityEngine.Events;
 
 public class Node : MonoBehaviour
 {
+    [Header("Node Config")]
     public bool isSource;
     public bool isSink;
-    public NodeUI nodeUI;
     public bool canRotate;
     public int totalFaces;
     public List<int> interconnectedFaces;
+    public NodeUI nodeUI;
 
+    [Header("Events")]
     public UnityEvent OnNodeRotated;
     public UnityEvent<bool> OnEnergyChanged;
 
@@ -20,7 +22,6 @@ public class Node : MonoBehaviour
     public bool HasEnergy { get => isSource || hasEnergy; set => hasEnergy = value; }
     private bool hasEnergy;
     
-    private int currentRotation;
     private Dictionary<int, NodeFace> connectedFaces;
 
     private void Awake()
@@ -38,8 +39,11 @@ public class Node : MonoBehaviour
             return;
         }
 
-        currentRotation++;
-        currentRotation %= totalFaces;
+        for (int i = 0; i < interconnectedFaces.Count; i++)
+        {
+            interconnectedFaces[i]++;
+            interconnectedFaces[i] %= totalFaces;
+        }
 
         UpdateNode();
     }
@@ -76,7 +80,7 @@ public class Node : MonoBehaviour
             return false;
         }
 
-        if (!interconnectedFaces.Contains((face + currentRotation) % totalFaces))
+        if (!interconnectedFaces.Contains(face))
         {
             return false;
         }
@@ -90,10 +94,9 @@ public class Node : MonoBehaviour
 
         foreach (int face in interconnectedFaces)
         {
-            int rotatedFace = (face + currentRotation) % totalFaces;
-            if (connectedFaces.ContainsKey(rotatedFace) && localSourceFace != rotatedFace && requester != connectedFaces[rotatedFace].node)
+            if (connectedFaces.ContainsKey(face) && localSourceFace != face && requester != connectedFaces[face].node)
             {
-                connectedFaces[rotatedFace].node.SetEnergyOnNode(HasEnergy, this);
+                connectedFaces[face].node.SetEnergyOnNode(HasEnergy, this);
             }
         }
 
@@ -104,14 +107,12 @@ public class Node : MonoBehaviour
     {
         foreach (int face in interconnectedFaces)
         {
-            int rotatedFace = (face + currentRotation) % totalFaces;
-
-            if (connectedFaces.ContainsKey(rotatedFace))
+            if (connectedFaces.ContainsKey(face))
             {
-                var nodeFace = connectedFaces[rotatedFace];
+                var nodeFace = connectedFaces[face];
                 if (nodeFace.node.IsNodeFaceEnergized(nodeFace.facePosition))
                 {
-                    localSourceFace = rotatedFace;
+                    localSourceFace = face;
                     return true;
                 }
             }
