@@ -20,7 +20,7 @@ public class LevelController : MonoBehaviour
 
     private void SetLevel()
     {
-        levelInstance = Instantiate(gameConfig.Levels[0]);
+        levelInstance = Instantiate(gameConfig.currentLevel);
 
         foreach (var connection in levelInstance.nodeConnections) 
         {
