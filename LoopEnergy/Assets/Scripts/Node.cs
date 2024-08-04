@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.Events;
+using static Unity.VisualScripting.Member;
 
 public class Node : MonoBehaviour
 {
@@ -12,7 +14,7 @@ public class Node : MonoBehaviour
     public bool canRotate;
     public int totalFaces;
     public List<int> interconnectedFaces;
-    public NodeUI nodeUI;
+    [SerializeField] private NodeUI nodeUI;
 
     [Header("Events")]
     public UnityEvent OnNodeRotated;
@@ -21,39 +23,67 @@ public class Node : MonoBehaviour
     public bool HasEnergy { get => isSource || hasEnergy; set => hasEnergy = value; }
     private bool hasEnergy;
     
-    private Dictionary<int, NodeFace> connectedFaces;
+    private LevelController levelController;
+    private List<Node> connectedNodes;
+    private List<NodeConnection> nodeConnections;
 
     private void Awake()
     {
-        connectedFaces = new Dictionary<int, NodeFace>();
+        connectedNodes = new List<Node>();
+        nodeConnections = new List<NodeConnection>();
         nodeUI.Init(this);
+    }
+
+    public void Init(LevelController levelController)
+    {
+        this.levelController = levelController;
+        UpdateCurrentConnections();
     }
 
     public void AddConnection(NodeConnection connection)
     {
-        if (connection.nodeAFace.node == this)
-        {
-            connectedFaces[connection.nodeAFace.facePosition] = connection.nodeBFace;
-        }
-        else
-        {
-            connectedFaces[connection.nodeBFace.facePosition] = connection.nodeAFace;
-        }
+        nodeConnections.Add(connection);
     }
-
-    public void SetEnergyOnNode(bool receivingEnergy, Node requester)
+    
+    public void PropagateEnergy(Node source = null)
     {
-        if (receivingEnergy == HasEnergy)
+        levelController.AddToEnergizedList(this, !HasEnergy);
+
+        HasEnergy = true;
+
+        UpdateCurrentConnections();
+
+        foreach (var node in connectedNodes)
         {
-            return;
+            if (node != source)
+            {
+                node.PropagateEnergy(this);
+            }
         }
-
-        HasEnergy = receivingEnergy;
-
-        UpdateNode(requester);
     }
 
-    public bool IsNodeFaceEnergized(int face) => HasEnergy && interconnectedFaces.Contains(face);
+    private void UpdateCurrentConnections()
+    {
+        connectedNodes.Clear();
+
+        foreach (var connection in nodeConnections)
+        {
+            if (connection.IsConnected())
+            {
+                connectedNodes.Add(connection.GetConnectedNode(this));
+            }
+        }
+    }
+
+    public void UpdateState()
+    {
+        OnEnergyChanged.Invoke(HasEnergy);
+    }
+
+    public bool IsNodeFaceOpen(int face)
+    {
+        return interconnectedFaces.Contains(face);
+    }
 
     public void Rotate()
     {
@@ -70,41 +100,6 @@ public class Node : MonoBehaviour
             interconnectedFaces[i] %= totalFaces;
         }
 
-        UpdateNode();
-    }
-
-    private void UpdateNode(Node requester = null)
-    {
-        HasEnergy = IsReceivingEnergy(out int localSourceFace);
-
-        foreach (int face in interconnectedFaces)
-        {
-            if (connectedFaces.ContainsKey(face) && localSourceFace != face && requester != connectedFaces[face].node)
-            {
-                connectedFaces[face].node.SetEnergyOnNode(HasEnergy, this);
-            }
-        }
-
-        OnEnergyChanged.Invoke(HasEnergy);
-    }
-
-    private bool IsReceivingEnergy(out int localSourceFace)
-    {
-        foreach (int face in interconnectedFaces)
-        {
-            if (connectedFaces.ContainsKey(face))
-            {
-                var nodeFace = connectedFaces[face];
-                if (nodeFace.node.IsNodeFaceEnergized(nodeFace.facePosition))
-                {
-                    localSourceFace = face;
-                    return true;
-                }
-            }
-        }
-
-        localSourceFace = -1;
-
-        return false;
+        levelController.OnNodeRotation();
     }
 }
