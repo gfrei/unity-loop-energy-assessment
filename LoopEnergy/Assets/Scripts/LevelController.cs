@@ -1,14 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class LevelController : MonoBehaviour
 {
-    [SerializeField] private List<Node> nodes;
-    [SerializeField] private List<NodeConnection> nodeConnections;
-    
+    [SerializeField] private LevelConfig levelConfigPrefab;
+
     private List<Node> changedNodes = new List<Node>();
     private List<Node> litNodes = new List<Node>();
+    private LevelConfig levelInstance;
 
     private void Start()
     {
@@ -19,13 +20,15 @@ public class LevelController : MonoBehaviour
 
     private void SetLevel()
     {
-        foreach (var connection in nodeConnections) 
+        levelInstance = Instantiate(levelConfigPrefab);
+
+        foreach (var connection in levelInstance.nodeConnections) 
         {
             connection.nodeAFace.node.AddConnection(connection);
             connection.nodeBFace.node.AddConnection(connection);
         }
 
-        foreach (var node in nodes)
+        foreach (var node in levelInstance.nodes)
         {
             node.Init(this);
         }
@@ -36,7 +39,7 @@ public class LevelController : MonoBehaviour
         litNodes.Clear();
         changedNodes.Clear();
 
-        foreach (var node in nodes)
+        foreach (var node in levelInstance.nodes)
         {
             if (node.isSource)
             {
@@ -44,7 +47,7 @@ public class LevelController : MonoBehaviour
             }
         }
 
-        foreach(var node in nodes)
+        foreach(var node in levelInstance.nodes)
         {
             if (!litNodes.Contains(node))
             {
