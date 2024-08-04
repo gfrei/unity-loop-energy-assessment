@@ -62,6 +62,11 @@ public class Node : MonoBehaviour
         }
     }
 
+    public void ClearEnergy()
+    {
+        HasEnergy = false; 
+    }
+
     private void UpdateCurrentConnections()
     {
         connectedNodes.Clear();

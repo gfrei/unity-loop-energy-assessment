@@ -48,7 +48,7 @@ public class LevelController : MonoBehaviour
         {
             if (!litNodes.Contains(node))
             {
-                node.HasEnergy = false;
+                node.ClearEnergy();
                 changedNodes.Add(node);
             }
         }
