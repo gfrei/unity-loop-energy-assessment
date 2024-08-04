@@ -18,7 +18,6 @@ public class Node : MonoBehaviour
     public UnityEvent OnNodeRotated;
     public UnityEvent<bool> OnEnergyChanged;
 
-
     public bool HasEnergy { get => isSource || hasEnergy; set => hasEnergy = value; }
     private bool hasEnergy;
     
@@ -29,6 +28,32 @@ public class Node : MonoBehaviour
         connectedFaces = new Dictionary<int, NodeFace>();
         nodeUI.Init(this);
     }
+
+    public void AddConnection(NodeConnection connection)
+    {
+        if (connection.nodeAFace.node == this)
+        {
+            connectedFaces[connection.nodeAFace.facePosition] = connection.nodeBFace;
+        }
+        else
+        {
+            connectedFaces[connection.nodeBFace.facePosition] = connection.nodeAFace;
+        }
+    }
+
+    public void SetEnergyOnNode(bool receivingEnergy, Node requester)
+    {
+        if (receivingEnergy == HasEnergy)
+        {
+            return;
+        }
+
+        HasEnergy = receivingEnergy;
+
+        UpdateNode(requester);
+    }
+
+    public bool IsNodeFaceEnergized(int face) => HasEnergy && interconnectedFaces.Contains(face);
 
     public void Rotate()
     {
@@ -46,46 +71,6 @@ public class Node : MonoBehaviour
         }
 
         UpdateNode();
-    }
-
-    public void AddConnection(NodeConnection connection)
-    {
-        if (connection.nodeAFace.node == this)
-        {
-            connectedFaces[connection.nodeAFace.facePosition] = connection.nodeBFace;
-        }
-        else
-        {
-            connectedFaces[connection.nodeBFace.facePosition] = connection.nodeAFace;
-        }
-
-    }
-
-    public void SetEnergyOnNode(bool receivingEnergy, Node requester)
-    {
-        if (receivingEnergy == HasEnergy)
-        {
-            return;
-        }
-
-        HasEnergy = receivingEnergy;
-
-        UpdateNode(requester);
-    }
-
-    public bool IsNodeFaceEnergized(int face)
-    {
-        if (!HasEnergy)
-        {
-            return false;
-        }
-
-        if (!interconnectedFaces.Contains(face))
-        {
-            return false;
-        }
-
-        return true;
     }
 
     private void UpdateNode(Node requester = null)
