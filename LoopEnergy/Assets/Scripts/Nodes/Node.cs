@@ -33,11 +33,6 @@ public class Node : MonoBehaviour
         connectedNodes = new List<Node>();
         nodeConnections = new List<NodeConnection>();
         nodeUI.Init(this);
-    }
-
-    public void Init(LevelController levelController)
-    {
-        this.levelController = levelController;
         UpdateCurrentConnections();
     }
 
@@ -54,6 +49,7 @@ public class Node : MonoBehaviour
 
         UpdateCurrentConnections();
 
+        // Propagate to each connected neighbour
         foreach (var node in connectedNodes)
         {
             if (node != source)
@@ -100,8 +96,6 @@ public class Node : MonoBehaviour
                 interconnectedFaces[i]++;
                 interconnectedFaces[i] %= totalFaces;
             }
-
-            levelController.OnNodeRotation();
         }
 
         OnNodeRotated.Invoke();

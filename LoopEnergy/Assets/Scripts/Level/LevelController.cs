@@ -31,7 +31,8 @@ public class LevelController : MonoBehaviour
 
         foreach (var node in levelInstance.nodes)
         {
-            node.Init(this);
+            node.OnNodeRotated.AddListener(OnNodeRotation);
+
             if (node.isSink)
             {
                 sinkNodes.Add(node);
