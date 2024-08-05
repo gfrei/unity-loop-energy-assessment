@@ -20,7 +20,7 @@ public class LevelSelectionCard : MonoBehaviour
     {
         bool isUnlocked = ProgressionController.Instance.IsLevelUnlocked(level);
         button.enabled = isUnlocked;
-        isLockedText.text = isUnlocked ? locked : open;
+        isLockedText.text = isUnlocked ? open : locked;
         nameText.text = level.name;
 
         this.gameConfig = gameConfig;
