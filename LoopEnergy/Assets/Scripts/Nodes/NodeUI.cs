@@ -23,7 +23,12 @@ public class NodeUI : MonoBehaviour
         isSinkObject.gameObject.SetActive(node.isSink);
         isSourceObject.gameObject.SetActive(node.isSource);
 
-        foreach (var face in interconnectedFaces)
+        foreach (var faceObject in faceObjects)
+        {
+            faceObject.SetActive(false);
+        }
+
+        foreach (int face in interconnectedFaces)
         {
             faceObjects[face].SetActive(true);
         }
