@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelConfig : MonoBehaviour
+public class LevelPrefab : MonoBehaviour
 {
     public List<Node> nodes;
     public List<NodeConnection> nodeConnections;

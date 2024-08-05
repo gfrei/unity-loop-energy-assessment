@@ -14,21 +14,22 @@ public class LevelSelectionCard : MonoBehaviour
     [SerializeField] private string open;
 
     private GameConfig gameConfig;
-    private int levelIndex;
+    private LevelData level;
 
-    public void Init(string levelName, bool isLocked, int levelIndex, GameConfig gameConfig)
+    public void Init(LevelData level, GameConfig gameConfig)
     {
-        nameText.text = levelName;
-        button.enabled = !isLocked;
-        isLockedText.text = isLocked ? locked : open;
+        bool isUnlocked = ProgressionController.Instance.IsLevelUnlocked(level);
+        button.enabled = isUnlocked;
+        isLockedText.text = isUnlocked ? locked : open;
+        nameText.text = level.name;
 
         this.gameConfig = gameConfig;
-        this.levelIndex = levelIndex;
+        this.level = level;
     }
 
     public void OnCardClicked()
     {
-        gameConfig.currentLevel = gameConfig.Levels[levelIndex];
+        gameConfig.currentLevel = level;
         SceneManager.LoadScene("GameScene");
     }
 }

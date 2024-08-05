@@ -10,7 +10,7 @@ public class LevelController : MonoBehaviour
 
     private List<Node> changedNodes = new List<Node>();
     private List<Node> litNodes = new List<Node>();
-    private LevelConfig levelInstance;
+    private LevelPrefab levelInstance;
 
     private void Start()
     {
@@ -21,7 +21,7 @@ public class LevelController : MonoBehaviour
 
     private void SetLevel()
     {
-        levelInstance = Instantiate(gameConfig.currentLevel);
+        levelInstance = Instantiate(gameConfig.currentLevel.prefab);
 
         foreach (var connection in levelInstance.nodeConnections) 
         {

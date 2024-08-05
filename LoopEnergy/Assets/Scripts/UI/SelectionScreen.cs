@@ -16,10 +16,10 @@ public class SelectionScreen : MonoBehaviour
 
     private void InstatiateCards()
     {
-        foreach(var level in gameConfig.Levels)
+        foreach(var level in gameConfig.LevelConfigs)
         {
             LevelSelectionCard cardInstance = Instantiate(selectCardPrefab, cardsListTransform);
-            cardInstance.Init(level.name, false, 0, gameConfig);
+            cardInstance.Init(level, gameConfig);
         }
     }
 }

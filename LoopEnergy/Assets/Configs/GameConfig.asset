@@ -12,7 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8a9a9888d700ea43aab77ca3e338e3f, type: 3}
   m_Name: GameConfig
   m_EditorClassIdentifier: 
-  Levels:
-  - {fileID: 1913875163447142619, guid: 5a36dbb01f9d28b4493c23982464bf22, type: 3}
-  - {fileID: 1913875163447142619, guid: bff9aa8fceb0cf844a20d681c75077f5, type: 3}
-  currentLevel: {fileID: 1913875163447142619, guid: 5a36dbb01f9d28b4493c23982464bf22, type: 3}
+  LevelConfigs:
+  - prefab: {fileID: 1913875163447142619, guid: 5a36dbb01f9d28b4493c23982464bf22, type: 3}
+    name: First Level
+  - prefab: {fileID: 1913875163447142619, guid: bff9aa8fceb0cf844a20d681c75077f5, type: 3}
+    name: Second Level
+  currentLevel:
+    prefab: {fileID: 0}
+    name: 
