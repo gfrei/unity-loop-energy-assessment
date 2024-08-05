@@ -22,4 +22,9 @@ public class SelectionScreen : MonoBehaviour
             cardInstance.Init(level, gameConfig);
         }
     }
+
+    public void ResetSave()
+    {
+        ProgressionController.Instance.ResetSave();
+    }
 }
