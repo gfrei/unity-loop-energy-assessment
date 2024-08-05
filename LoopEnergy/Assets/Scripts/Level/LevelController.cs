@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -52,7 +53,6 @@ public class LevelController : MonoBehaviour
         ReturnToSelection();
     }
 
-
     public void OnNodeRotation()
     {
         litNodes.Clear();
@@ -63,7 +63,7 @@ public class LevelController : MonoBehaviour
         {
             if (node.isSource)
             {
-                node.PropagateEnergy();
+                node.PropagateEnergy(AddToEnergizedList);
             }
         }
 
@@ -87,7 +87,7 @@ public class LevelController : MonoBehaviour
         CheckSinks();
     }
 
-    public void AddToEnergizedList(Node node, bool changedState)
+    private void AddToEnergizedList(Node node, bool changedState)
     {
         litNodes.Add(node);
 

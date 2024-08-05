@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
@@ -45,9 +46,9 @@ public class Node : MonoBehaviour
         nodeConnections.Add(connection);
     }
     
-    public void PropagateEnergy(Node source = null)
+    public void PropagateEnergy(Action<Node, bool> onPropagateEnergy, Node source = null)
     {
-        levelController.AddToEnergizedList(this, !HasEnergy);
+        onPropagateEnergy(this, !HasEnergy);
 
         HasEnergy = true;
 
@@ -57,7 +58,7 @@ public class Node : MonoBehaviour
         {
             if (node != source)
             {
-                node.PropagateEnergy(this);
+                node.PropagateEnergy(onPropagateEnergy, this);
             }
         }
     }
@@ -92,19 +93,17 @@ public class Node : MonoBehaviour
 
     public void Rotate()
     {
+        if (canRotate)
+        {
+            for (int i = 0; i < interconnectedFaces.Count; i++)
+            {
+                interconnectedFaces[i]++;
+                interconnectedFaces[i] %= totalFaces;
+            }
+
+            levelController.OnNodeRotation();
+        }
+
         OnNodeRotated.Invoke();
-
-        if (!canRotate)
-        {
-            return;
-        }
-
-        for (int i = 0; i < interconnectedFaces.Count; i++)
-        {
-            interconnectedFaces[i]++;
-            interconnectedFaces[i] %= totalFaces;
-        }
-
-        levelController.OnNodeRotation();
     }
 }
