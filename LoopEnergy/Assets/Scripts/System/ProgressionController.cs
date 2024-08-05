@@ -26,19 +26,33 @@ public class ProgressionController
     private static ProgressionController instance;
 
     private ProgressionController() { }
+    private const string completeLevelsKey = "completeLevelsKey";
 
     public bool IsLevelUnlocked(LevelData level)
     {
-        return true;
+        return PlayerPrefs.GetInt(completeLevelsKey, 0) >= level.unlockCost;
     }
 
     public bool IsLevelComplete(LevelData level)
     {
-        return SaveController.IsLevelComplete(level.id);
+        return PlayerPrefs.GetInt(level.id, 0) == 1;
     }
 
     public void CompleteLevel(LevelData level)
     {
-        SaveController.SetLevelComplete(level.id);
+        bool isLevelAlreadyComplete = IsLevelComplete(level);
+
+        PlayerPrefs.SetInt(level.id, 1);
+
+        if (!isLevelAlreadyComplete)
+        {
+            int completeLevels = PlayerPrefs.GetInt(completeLevelsKey, 0);
+            PlayerPrefs.SetInt(completeLevelsKey, completeLevels + 1);
+        }
+    }
+
+    public void ResetSave()
+    {
+        PlayerPrefs.DeleteAll();
     }
 }
