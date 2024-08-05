@@ -4,8 +4,14 @@ using UnityEngine;
 
 public class LevelPrefab : MonoBehaviour
 {
-    public List<Node> nodes;
-    public List<NodeConnection> nodeConnections;
+    [HideInInspector] public Node[] nodes;
+    [HideInInspector] public NodeConnection[] nodeConnections;
 
     [SerializeField] private GameObject levelObject;
+
+    public void Init()
+    {
+        nodes = GetComponentsInChildren<Node>();
+        nodeConnections = GetComponentsInChildren<NodeConnection>();
+    }
 }

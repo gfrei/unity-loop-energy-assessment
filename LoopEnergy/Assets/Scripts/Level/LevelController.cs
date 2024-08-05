@@ -25,6 +25,7 @@ public class LevelController : MonoBehaviour
     {
         // Instantiate current level
         levelInstance = Instantiate(gameConfig.currentLevel.prefab);
+        levelInstance.Init();
 
         // Set node connections
         foreach (var connection in levelInstance.nodeConnections) 
