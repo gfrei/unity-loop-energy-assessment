@@ -77,4 +77,9 @@ public class LevelController : MonoBehaviour
         SceneManager.LoadScene("SelectionScene");
     }
 
+    public void CompleteLevel()
+    {
+        ProgressionController.Instance.CompleteLevel(gameConfig.currentLevel);
+    }
+
 }
