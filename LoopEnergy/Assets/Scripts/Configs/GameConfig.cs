@@ -15,5 +15,6 @@ public struct LevelData
 {
     public LevelPrefab prefab;
     public string name;
+    public int unlockCost;
     public string id => prefab.name;
 }
