@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 public class LevelController : MonoBehaviour
 {
     [SerializeField] private GameConfig gameConfig;
+    [SerializeField] private GameObject levelCompletePanel;
 
     private List<Node> changedNodes = new List<Node>();
     private List<Node> litNodes = new List<Node>();
@@ -16,6 +17,7 @@ public class LevelController : MonoBehaviour
 
     private void Start()
     {
+        levelCompletePanel.SetActive(false);
         SetLevel();
     }
 
@@ -51,7 +53,8 @@ public class LevelController : MonoBehaviour
         }
 
         CompleteLevel();
-        ReturnToSelection();
+
+        OpenLevelCompletePanel();
     }
 
     public void OnNodeRotation()
@@ -96,6 +99,11 @@ public class LevelController : MonoBehaviour
         {
             changedNodes.Add(node);
         }
+    }
+
+    public void OpenLevelCompletePanel()
+    {
+        levelCompletePanel.SetActive(true);
     }
 
     public void ReturnToSelection()
