@@ -23,14 +23,17 @@ public class LevelController : MonoBehaviour
 
     private void SetLevel()
     {
+        // Instantiate current level
         levelInstance = Instantiate(gameConfig.currentLevel.prefab);
 
+        // Set node connections
         foreach (var connection in levelInstance.nodeConnections) 
         {
             connection.nodeAFace.node.AddConnection(connection);
             connection.nodeBFace.node.AddConnection(connection);
         }
 
+        // Add callback and check sinks
         foreach (var node in levelInstance.nodes)
         {
             node.OnNodeRotated.AddListener(OnNodeRotation);
@@ -48,6 +51,7 @@ public class LevelController : MonoBehaviour
         {
             if (!sink.HasEnergy)
             {
+                // Not all sinks have energy
                 return;
             }
         }
