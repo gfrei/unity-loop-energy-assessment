@@ -10,20 +10,16 @@ public class LevelController : MonoBehaviour
     [SerializeField] private GameConfig gameConfig;
     [SerializeField] private GameObject levelCompletePanel;
 
-    [Header("Audio")]
-    [SerializeField] private AudioSource audioSource;
-    [SerializeField] private AudioClip rotateClip;
-    [SerializeField] private AudioClip completeLevelClip;
-    [SerializeField] private AudioClip buttonPressedClip;
-
     private List<Node> changedNodes = new List<Node>();
     private List<Node> litNodes = new List<Node>();
     private List<Node> sinkNodes = new List<Node>();
     private LevelPrefab levelInstance;
+    private AudioController audioController;
     private bool isLevelComplete;
 
     private void Start()
     {
+        audioController = FindObjectOfType<AudioController>();
         levelCompletePanel.SetActive(false);
         SetLevel();
     }
@@ -87,7 +83,7 @@ public class LevelController : MonoBehaviour
         CheckSinks();
 
         // Play rotation clip
-        audioSource.PlayOneShot(rotateClip);
+        audioController.PlayRotateSfx();
     }
 
     private void AddToEnergizedList(Node node, bool changedState)
@@ -123,20 +119,20 @@ public class LevelController : MonoBehaviour
 
     public void OpenLevelCompletePanel()
     {
-        audioSource.PlayOneShot(completeLevelClip);
+        audioController.PlayCompleteLevelSfx();
         levelCompletePanel.SetActive(true);
     }
 
     public void ReturnToSelection()
     {
-        audioSource.PlayOneShot(buttonPressedClip);
+        audioController.PlayButtonSfx();
         SceneManager.LoadScene("SelectionScene");
     }
 
     public void CompleteLevel()
     {
         isLevelComplete = true;
-        audioSource.PlayOneShot(buttonPressedClip);
+        audioController.PlayButtonSfx();
         ProgressionController.Instance.CompleteLevel(gameConfig.currentLevel);
     }
 

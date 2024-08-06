@@ -14,9 +14,10 @@ public class LevelSelectionCard : MonoBehaviour
     [SerializeField] private string open;
 
     private GameConfig gameConfig;
+    private AudioController audioController;
     private LevelData level;
 
-    public void Init(LevelData level, GameConfig gameConfig)
+    public void Init(LevelData level, GameConfig gameConfig, AudioController audioController)
     {
         bool isUnlocked = ProgressionController.Instance.IsLevelUnlocked(level);
         button.enabled = isUnlocked;
@@ -24,12 +25,14 @@ public class LevelSelectionCard : MonoBehaviour
         nameText.text = level.name;
 
         this.gameConfig = gameConfig;
+        this.audioController = audioController;
         this.level = level;
     }
 
     public void OnCardClicked()
     {
         gameConfig.currentLevel = level;
+        audioController.PlayButtonSfx();
         SceneManager.LoadScene("GameScene");
     }
 }

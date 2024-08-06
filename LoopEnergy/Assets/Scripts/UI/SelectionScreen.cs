@@ -8,9 +8,18 @@ public class SelectionScreen : MonoBehaviour
     [SerializeField] private GameConfig gameConfig;
     [SerializeField] private LevelSelectionCard selectCardPrefab;
     [SerializeField] private RectTransform cardsListTransform;
+    [SerializeField] private AudioController audioControllerPrefab;
+
+    private AudioController audioController;
 
     private void Start()
     {
+        audioController = FindObjectOfType<AudioController>();
+        if (audioController == null)
+        {
+            audioController = Instantiate(audioControllerPrefab);
+        }
+
         InstatiateCards();
     }
 
@@ -19,12 +28,13 @@ public class SelectionScreen : MonoBehaviour
         foreach(var level in gameConfig.LevelConfigs)
         {
             LevelSelectionCard cardInstance = Instantiate(selectCardPrefab, cardsListTransform);
-            cardInstance.Init(level, gameConfig);
+            cardInstance.Init(level, gameConfig, audioController);
         }
     }
 
     public void ResetSave()
     {
+        audioController.PlayButtonSfx();
         ProgressionController.Instance.ResetSave();
     }
 }

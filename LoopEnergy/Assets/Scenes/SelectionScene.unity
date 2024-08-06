@@ -246,6 +246,7 @@ MonoBehaviour:
   gameConfig: {fileID: 11400000, guid: ba5d3305c7dfa8a43b94d8a2ac85d04f, type: 2}
   selectCardPrefab: {fileID: 9103008633364862590, guid: 0e5e7df5d1f9a554c99a8f58b83f2436, type: 3}
   cardsListTransform: {fileID: 1457759646}
+  audioControllerPrefab: {fileID: 2223377898065353654, guid: 66423852676f1344485b7a2fa2f4a747, type: 3}
 --- !u!4 &716839216
 Transform:
   m_ObjectHideFlags: 0
