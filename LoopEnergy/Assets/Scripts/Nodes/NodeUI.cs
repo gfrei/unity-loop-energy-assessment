@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class NodeUI : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class NodeUI : MonoBehaviour
     private bool canRotate;
     private int totalFaces;
     private List<int> interconnectedFaces;
+    private Vector3 rotationStep;
+    private int rotationCount;
 
     public void Init(Node node)
     {
@@ -22,6 +25,8 @@ public class NodeUI : MonoBehaviour
         interconnectedFaces = node.interconnectedFaces;
         isSinkObject.gameObject.SetActive(node.isSink);
         isSourceObject.gameObject.SetActive(node.isSource);
+        rotationStep = new Vector3(0f, 0f, -360f / totalFaces);
+
 
         foreach (var faceObject in faceObjects)
         {
@@ -38,16 +43,21 @@ public class NodeUI : MonoBehaviour
 
     public void OnRotateNode()
     {
-        float rotationStep = 360f / totalFaces;
-        Vector3 rotation = new Vector3(0f, 0f, -rotationStep);
+        rotationCount++;
+        Vector3 newRotation = rotationStep * rotationCount;
+        Vector3 fakeRotation = rotationStep * 0.2f;
+        
 
         if (canRotate)
         {
-            uiObject.Rotate(rotation);
+            // Animation example with code
+            uiObject.transform.DORotate(newRotation, 0.15f).SetEase(Ease.OutBack);
         }
         else
         {
-            //Run cant rotate feedback
+            // Animation example with code
+            uiObject.transform.DORotate(fakeRotation, 0.07f).SetEase(Ease.InOutFlash)
+                .OnComplete(() => uiObject.transform.DORotate(Vector3.zero, 0.07f).SetEase(Ease.InOutFlash));
         }
     }
 
