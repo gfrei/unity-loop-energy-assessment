@@ -9,6 +9,8 @@ public class LevelPrefab : MonoBehaviour
 
     [SerializeField] private GameObject levelObject;
 
+    public GameObject nodesParent;
+
     public void Init()
     {
         nodes = GetComponentsInChildren<Node>();

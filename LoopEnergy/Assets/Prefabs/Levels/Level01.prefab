@@ -58,6 +58,7 @@ MonoBehaviour:
   - {fileID: 1047724520605274676}
   - {fileID: 3200630203431830724}
   levelObject: {fileID: 3646294173916623621}
+  nodesParent: {fileID: 7481444933283057738}
 --- !u!1 &1711946182230353355
 GameObject:
   m_ObjectHideFlags: 0
@@ -150,7 +151,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0

@@ -58,6 +58,7 @@ MonoBehaviour:
   - {fileID: 1047724520605274676}
   - {fileID: 3200630203431830724}
   levelObject: {fileID: 3646294173916623621}
+  nodesParent: {fileID: 7481444933283057738}
 --- !u!1 &1711946182230353355
 GameObject:
   m_ObjectHideFlags: 0

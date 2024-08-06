@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -113,8 +114,6 @@ public class LevelController : MonoBehaviour
         }
 
         CompleteLevel();
-
-        OpenLevelCompletePanel();
     }
 
     public void OpenLevelCompletePanel()
@@ -133,7 +132,11 @@ public class LevelController : MonoBehaviour
     {
         isLevelComplete = true;
         audioController.PlayButtonSfx();
+        // Animation example with code
+        levelInstance.nodesParent.transform.DOShakePosition(2f, 10f);
         ProgressionController.Instance.CompleteLevel(gameConfig.currentLevel);
+
+        OpenLevelCompletePanel();
     }
 
 }
